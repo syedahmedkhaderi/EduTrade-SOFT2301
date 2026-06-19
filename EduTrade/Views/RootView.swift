@@ -35,32 +35,79 @@ struct RootView: View {
     }
 }
 
-/// Branded splash / launch screen.
+/// Branded animated splash / launch screen.
+/// Shows the EduTrade logo centered with the app name and tagline for ~2.5s.
 struct SplashView: View {
+    @State private var logoScale: CGFloat = 0.6
+    @State private var logoOpacity: Double = 0
+    @State private var textOpacity: Double = 0
+    @State private var taglineOpacity: Double = 0
+
     var body: some View {
         ZStack {
             LinearGradient(
                 colors: [Theme.primary, Theme.accentColor],
                 startPoint: .top, endPoint: .bottom
             )
-            VStack(spacing: 16) {
+
+            VStack(spacing: 20) {
+                Spacer()
+
+                // Logo with spring entrance
                 Image("LaunchLogo")
                     .resizable()
                     .scaledToFit()
-                    .frame(width: 90, height: 90)
-                    .clipShape(RoundedRectangle(cornerRadius: 22))
+                    .frame(width: 100, height: 100)
+                    .clipShape(RoundedRectangle(cornerRadius: 24))
                     .overlay(
-                        RoundedRectangle(cornerRadius: 22).stroke(.white.opacity(0.3), lineWidth: 1)
+                        RoundedRectangle(cornerRadius: 24)
+                            .stroke(.white.opacity(0.35), lineWidth: 1)
                     )
+                    .shadow(color: .black.opacity(0.25), radius: 15, y: 8)
+                    .scaleEffect(logoScale)
+                    .opacity(logoOpacity)
+
+                // App name
                 Text(Constants.appName)
-                    .font(.system(size: 28, weight: .bold))
+                    .font(.system(size: 32, weight: .heavy, design: .rounded))
                     .foregroundStyle(.white)
+                    .opacity(textOpacity)
+
+                // Tagline
                 Text(Constants.appTagline)
                     .font(.subheadline)
                     .foregroundStyle(.white.opacity(0.85))
+                    .multilineTextAlignment(.center)
+                    .opacity(taglineOpacity)
+
+                Spacer()
+
+                // Loading indicator
+                VStack(spacing: 8) {
+                    ProgressView()
+                        .tint(.white)
+                    Text("UDST Student Marketplace")
+                        .font(.system(size: 11, weight: .medium))
+                        .foregroundStyle(.white.opacity(0.6))
+                }
+                .padding(.bottom, 50)
             }
         }
         .ignoresSafeArea()
+        .onAppear {
+            // Staggered entrance animation
+            withAnimation(.spring(duration: 0.8, bounce: 0.4).delay(0.1)) {
+                logoScale = 1.0
+                logoOpacity = 1.0
+            }
+            withAnimation(.easeIn(duration: 0.5).delay(0.5)) {
+                textOpacity = 1.0
+            }
+            withAnimation(.easeIn(duration: 0.5).delay(0.9)) {
+                taglineOpacity = 1.0
+            }
+        }
+        .transition(.opacity)
     }
 }
 

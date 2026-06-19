@@ -7,6 +7,7 @@ final class ProfileViewModel: ObservableObject {
     @Published var myListings: [Listing] = []
     @Published var purchases: [Transaction] = []
     @Published var sales: [Transaction] = []
+    @Published var savedListings: [Listing] = []
     @Published var isLoading = false
     @Published var errorMessage: String?
 
@@ -46,5 +47,20 @@ final class ProfileViewModel: ObservableObject {
     func markAsSold(_ id: String) async {
         try? await listingService.markAsSold(id: id)
         await loadAll()
+    }
+
+    func loadSavedListings() async {
+        let key = "savedListingIDs"
+        guard let ids = UserDefaults.standard.array(forKey: key) as? [String], !ids.isEmpty else {
+            savedListings = []
+            return
+        }
+        var results: [Listing] = []
+        for id in ids {
+            if let listing = (try? await listingService.fetchListing(id: id)) ?? nil {
+                results.append(listing)
+            }
+        }
+        savedListings = results
     }
 }

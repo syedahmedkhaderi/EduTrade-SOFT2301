@@ -19,6 +19,8 @@ final class SearchViewModel: ObservableObject {
     @Published var filtersApplied = false
 
     @Published var recentSearches: [String] = []
+    @Published var trendingListings: [Listing] = []
+    @Published var categoryCounts: [(subject: String, count: Int)] = []
 
     private let service: ListingServiceProtocol
     private let appState: AppState
@@ -36,6 +38,43 @@ final class SearchViewModel: ObservableObject {
     var hasActiveFilters: Bool {
         filterSubject != nil || !filterCourseCode.isEmpty ||
         filterConditions.count > 0 || filtersApplied
+    }
+
+    // MARK: - Discovery feed (recommendations shown when search is empty)
+
+    func loadDiscoveryFeed() async {
+        // Fetch all active listings for discovery
+        if let page = try? await service.fetchActiveListings(cursor: nil) {
+            trendingListingsFullList = page.listings
+            // Recommended deals = cheapest items (value picks for students)
+            trendingListings = page.listings
+                .sorted { $0.price < $1.price }
+                .prefix(6)
+                .map { $0 }
+            await cacheSellers(trendingListings)
+        }
+        // Popular categories = count listings per subject
+        var counts: [(String, Int)] = []
+        for subject in Constants.subjects {
+            let count = trendingListingsFullList.filter { $0.subject == subject }.count
+            if count > 0 { counts.append((subject, count)) }
+        }
+        categoryCounts = counts.sorted { $0.1 > $1.1 }.prefix(6).map { ($0.0, $0.1) }
+    }
+
+    /// Cached full active listing list for category counting.
+    private var trendingListingsFullList: [Listing] = []
+
+    func searchByCategory(_ subject: String) async {
+        filterSubject = subject
+        filtersApplied = true
+        queryText = ""
+        await runSearch(text: subject)
+    }
+
+    func searchBySuggestion(_ term: String) async {
+        queryText = term
+        await runSearch(text: term)
     }
 
     // MARK: - Debounced search

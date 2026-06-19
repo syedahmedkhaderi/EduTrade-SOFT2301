@@ -42,11 +42,21 @@ final class AppState: ObservableObject {
     }
 
     func bootstrap() async {
-        await services.store.bootstrap()
+        // Show splash for a minimum duration so the branding is visible.
+        async let storeTask: Void = services.store.bootstrap()
+
+        _ = await storeTask
         if let user = await services.auth.currentUser() {
             await applyUser(user)
         }
-        isLoading = false
+        // Minimum 2.5s splash display (skip during UI tests for speed)
+        let isUITest = CommandLine.arguments.contains("-UITests")
+        if !isUITest {
+            try? await Task.sleep(nanoseconds: 2_500_000_000)
+        }
+        withAnimation(.easeOut(duration: 0.4)) {
+            isLoading = false
+        }
     }
 
     func applyUser(_ user: User) {

@@ -20,14 +20,12 @@ final class AdminDashboardViewModel: ObservableObject {
     private var _activeListingCount: Int = 0
 
     private let admin: AdminServiceProtocol
-    private let store: MockStore
     private let txService: TransactionServiceProtocol
     private let listingService: ListingServiceProtocol
 
     init() {
         let appState = AppState.current!
         self.admin = appState.services.admin
-        self.store = appState.services.store
         self.txService = appState.services.transactions
         self.listingService = appState.services.listings
     }

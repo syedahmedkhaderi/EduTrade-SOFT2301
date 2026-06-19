@@ -1,6 +1,6 @@
 import SwiftUI
 
-/// Search screen (spec §4.4, §12.6).
+/// Search screen with discovery feed, recommendations, and filters (spec §4.4, §12.6).
 struct SearchView: View {
     @EnvironmentObject var appState: AppState
     @StateObject private var vm = SearchViewModel()
@@ -8,20 +8,23 @@ struct SearchView: View {
 
     var body: some View {
         NavigationStack {
-            VStack(spacing: 0) {
-                if !vm.hasSearched && vm.results.isEmpty {
-                    recentSearchesView
-                } else if vm.results.isEmpty && vm.hasSearched && !vm.isLoading {
+            ScrollView {
+                if vm.isLoading && vm.results.isEmpty {
+                    ProgressView().padding(.top, 60)
+                } else if vm.hasSearched && vm.results.isEmpty && !vm.isLoading {
                     EmptyStateView(
                         symbol: "magnifyingglass",
                         title: "No results found",
                         subtitle: "Try different keywords or clear filters."
                     )
-                    .padding(.top, 80)
-                } else {
+                    .padding(.top, 60)
+                } else if vm.hasSearched && !vm.results.isEmpty {
                     resultList
+                } else {
+                    discoveryFeed
                 }
             }
+            .background(Theme.background)
             .navigationTitle("Search")
             .searchable(text: $vm.queryText, prompt: "Search by title or course code…")
             .onChange(of: vm.queryText) { _, _ in vm.onQueryChange() }
@@ -41,86 +44,215 @@ struct SearchView: View {
                 ListingDetailView(listingID: listing.id)
             }
             .overlay {
-                if vm.isLoading { ProgressView().scaleEffect(1.2).padding() }
                 if let error = vm.errorMessage {
                     VStack { ErrorBanner(message: error) { vm.errorMessage = nil }; Spacer() }
                 }
             }
+            .task {
+                if vm.trendingListings.isEmpty {
+                    await vm.loadDiscoveryFeed()
+                }
+            }
+            .refreshable {
+                await vm.loadDiscoveryFeed()
+            }
         }
     }
 
-    private var resultList: some View {
-        ScrollView {
-            LazyVStack(spacing: 12) {
-                ForEach(vm.results) { listing in
-                    NavigationLink(value: listing) {
-                        HStack(spacing: 12) {
-                            ListingImage(imageKey: listing.imageURLs.first, title: listing.title, cornerRadius: 10)
-                                .frame(width: 80, height: 80)
-                            VStack(alignment: .leading, spacing: 4) {
-                                Text(listing.title).font(.subheadline.bold()).lineLimit(2)
-                                HStack(spacing: 4) {
-                                    Text(listing.courseCode).font(.caption).foregroundStyle(Theme.mutedText)
-                                    Text("·").foregroundStyle(Theme.mutedText)
-                                    Text(listing.subject).font(.caption).foregroundStyle(Theme.mutedText)
-                                }
-                                HStack {
-                                    Text(Formatters.currency(listing.price))
-                                        .font(.headline).foregroundStyle(Theme.accentColor)
-                                    Spacer()
-                                    ConditionTagView(condition: listing.condition)
-                                }
-                            }
-                            Spacer()
+    // MARK: - Discovery Feed (shown when no search active)
+
+    private var discoveryFeed: some View {
+        VStack(alignment: .leading, spacing: 24) {
+            // Quick suggestions
+            suggestionChips
+
+            // Popular categories
+            if !vm.categoryCounts.isEmpty {
+                sectionHeader(title: "Popular Categories", icon: "square.grid.2x2.fill")
+                categoryGrid
+            }
+
+            // Recommended deals
+            if !vm.trendingListings.isEmpty {
+                sectionHeader(title: "Recommended Deals", icon: "tag.fill")
+                trendingDealsCarousel
+            }
+
+            // Recent searches
+            if !vm.recentSearches.isEmpty {
+                sectionHeader(title: "Recent Searches", icon: "clock.fill")
+                recentSearchesList
+            }
+
+            // Footer tip
+            HStack(spacing: 8) {
+                Image(systemName: "lightbulb.fill").foregroundStyle(.orange)
+                Text("Tip: Search by course code (e.g. SOFT1101) to find exact materials for your classes.")
+                    .font(.caption).foregroundStyle(Theme.mutedText)
+            }
+            .padding(.top, 8)
+        }
+        .padding()
+    }
+
+    private var suggestionChips: some View {
+        ScrollView(.horizontal, showsIndicators: false) {
+            HStack(spacing: 8) {
+                ForEach(["Textbooks", "Notes", "Lab Kits", "SOFT", "MATH", "Engineering"], id: \.self) { term in
+                    Button {
+                        Task { await vm.searchBySuggestion(term) }
+                    } label: {
+                        HStack(spacing: 4) {
+                            Image(systemName: term.count <= 5 ? "magnifyingglass" : "book")
+                                .font(.system(size: 10))
+                            Text(term).font(.caption.weight(.medium))
                         }
-                        .padding(10)
+                        .padding(.horizontal, 14).padding(.vertical, 8)
+                        .background(Theme.accentColor.opacity(0.1))
+                        .foregroundStyle(Theme.accentColor)
+                        .clipShape(Capsule())
+                    }
+                }
+            }
+        }
+    }
+
+    private func sectionHeader(title: String, icon: String) -> some View {
+        HStack(spacing: 6) {
+            Image(systemName: icon).font(.system(size: 13)).foregroundStyle(Theme.accentColor)
+            Text(title).font(.headline)
+            Spacer()
+        }
+    }
+
+    private var categoryGrid: some View {
+        LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 10) {
+            ForEach(vm.categoryCounts, id: \.subject) { cat in
+                Button {
+                    Task { await vm.searchByCategory(cat.subject) }
+                } label: {
+                    HStack {
+                        VStack(alignment: .leading, spacing: 4) {
+                            Text(cat.subject).font(.subheadline.weight(.semibold))
+                            Text("\(cat.count) item\(cat.count == 1 ? "" : "s")")
+                                .font(.caption).foregroundStyle(Theme.mutedText)
+                        }
+                        Spacer()
+                        Image(systemName: "chevron.right")
+                            .font(.caption).foregroundStyle(Theme.mutedText)
+                    }
+                    .padding(12)
+                    .background(Theme.card)
+                    .clipShape(RoundedRectangle(cornerRadius: 12))
+                }
+                .foregroundStyle(.primary)
+            }
+        }
+    }
+
+    private var trendingDealsCarousel: some View {
+        ScrollView(.horizontal, showsIndicators: false) {
+            HStack(spacing: 12) {
+                ForEach(vm.trendingListings) { listing in
+                    NavigationLink(value: listing) {
+                        VStack(alignment: .leading, spacing: 0) {
+                            ListingImage(imageKey: listing.imageURLs.first, title: listing.title, cornerRadius: 0)
+                                .frame(width: 130, height: 130)
+                                .clipped()
+                            VStack(alignment: .leading, spacing: 4) {
+                                Text(listing.title).font(.caption.weight(.semibold)).lineLimit(2)
+                                Text(Formatters.currency(listing.price))
+                                    .font(.subheadline.weight(.bold))
+                                    .foregroundStyle(Theme.accentColor)
+                            }
+                            .padding(8)
+                            .frame(width: 130, alignment: .leading)
+                        }
                         .background(Theme.card)
                         .clipShape(RoundedRectangle(cornerRadius: 12))
+                        .shadow(color: .black.opacity(0.06), radius: 4, y: 2)
                     }
                     .buttonStyle(.plain)
                 }
             }
-            .padding(.horizontal)
-            .padding(.top, 8)
         }
-        .background(Theme.background)
     }
 
-    private var recentSearchesView: some View {
-        VStack(alignment: .leading, spacing: 16) {
-            if vm.recentSearches.isEmpty {
-                EmptyStateView(
-                    symbol: "magnifyingglass",
-                    title: "Search EduTrade",
-                    subtitle: "Find textbooks, lab kits, and notes by title or course code."
-                )
-                .padding(.top, 60)
-            } else {
-                HStack {
-                    Text("Recent Searches").font(.headline)
-                    Spacer()
-                    Button("Clear") { vm.clearRecents() }
-                        .font(.caption).foregroundStyle(.red)
-                }
-                ForEach(vm.recentSearches, id: \.self) { term in
-                    Button {
-                        vm.queryText = term
-                        Task { await vm.runSearch(text: term) }
-                    } label: {
-                        HStack {
-                            Image(systemName: "clock").foregroundStyle(Theme.mutedText)
-                            Text(term)
-                            Spacer()
-                            Image(systemName: "arrow.up.left").foregroundStyle(Theme.mutedText)
-                        }
-                        .padding(.vertical, 6)
+    private var recentSearchesList: some View {
+        VStack(alignment: .leading, spacing: 4) {
+            ForEach(vm.recentSearches, id: \.self) { term in
+                Button {
+                    Task { await vm.searchBySuggestion(term) }
+                } label: {
+                    HStack {
+                        Image(systemName: "clock.arrow.circlepath").foregroundStyle(Theme.mutedText)
+                        Text(term).font(.subheadline)
+                        Spacer()
+                        Image(systemName: "arrow.up.left").foregroundStyle(Theme.mutedText)
                     }
-                    .foregroundStyle(.primary)
+                    .padding(.vertical, 8)
+                }
+                .foregroundStyle(.primary)
+            }
+            Button {
+                vm.clearRecents()
+            } label: {
+                Text("Clear recent searches").font(.caption).foregroundStyle(.red)
+            }
+            .padding(.top, 4)
+        }
+    }
+
+    // MARK: - Search Results
+
+    private var resultList: some View {
+        LazyVStack(spacing: 12) {
+            if vm.hasActiveFilters {
+                HStack {
+                    Text("\(vm.results.count) result\(vm.results.count == 1 ? "" : "s")")
+                        .font(.caption).foregroundStyle(Theme.mutedText)
+                    Spacer()
+                    Button("Clear filters") {
+                        vm.resetFilters()
+                    }
+                    .font(.caption.weight(.medium)).foregroundStyle(Theme.accentColor)
+                }
+                .padding(.horizontal, 4)
+            }
+            ForEach(vm.results) { listing in
+                NavigationLink(value: listing) {
+                    searchResultRow(listing)
+                }
+                .buttonStyle(.plain)
+            }
+        }
+        .padding()
+        .padding(.bottom, 20)
+    }
+
+    private func searchResultRow(_ listing: Listing) -> some View {
+        HStack(spacing: 12) {
+            ListingImage(imageKey: listing.imageURLs.first, title: listing.title, cornerRadius: 10)
+                .frame(width: 80, height: 80)
+            VStack(alignment: .leading, spacing: 4) {
+                Text(listing.title).font(.subheadline.bold()).lineLimit(2)
+                HStack(spacing: 4) {
+                    Text(listing.courseCode).font(.caption).foregroundStyle(Theme.mutedText)
+                    Text("·").foregroundStyle(Theme.mutedText)
+                    Text(listing.subject).font(.caption).foregroundStyle(Theme.mutedText)
+                }
+                HStack {
+                    Text(Formatters.currency(listing.price))
+                        .font(.headline).foregroundStyle(Theme.accentColor)
+                    Spacer()
+                    ConditionTagView(condition: listing.condition)
                 }
             }
             Spacer()
         }
-        .padding()
+        .padding(10)
+        .background(Theme.card)
+        .clipShape(RoundedRectangle(cornerRadius: 12))
     }
 }
 

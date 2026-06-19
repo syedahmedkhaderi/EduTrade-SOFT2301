@@ -99,13 +99,20 @@ struct PhotoStepView: View {
 
     var body: some View {
         ScrollView {
-            VStack(alignment: .leading, spacing: 16) {
-                Text("Add up to \(Constants.maxListingImages) photos")
-                    .font(.headline)
-                Text("At least one photo is required. The first photo is the cover image.")
-                    .font(.caption)
-                    .foregroundStyle(Theme.mutedText)
+            VStack(alignment: .leading, spacing: 20) {
+                // Header with progress
+                VStack(alignment: .leading, spacing: 6) {
+                    Text("Step 1 of 3 — Photos")
+                        .font(.caption.weight(.semibold))
+                        .foregroundStyle(Theme.accentColor)
+                    Text("Add photos of your item")
+                        .font(.title2.bold())
+                    Text("Good photos sell faster. Add up to \(Constants.maxListingImages) photos. The first one becomes the cover image.")
+                        .font(.subheadline)
+                        .foregroundStyle(Theme.mutedText)
+                }
 
+                // Photo grid
                 LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible())], spacing: 12) {
                     ForEach(Array(vm.images.indices), id: \.self) { idx in
                         Image(uiImage: vm.images[idx])
@@ -122,21 +129,69 @@ struct PhotoStepView: View {
                                 }
                                 .padding(4)
                             }
+                            .overlay(alignment: .bottomLeading) {
+                                if idx == 0 {
+                                    Text("Cover")
+                                        .font(.system(size: 9, weight: .bold))
+                                        .padding(.horizontal, 6).padding(.vertical, 3)
+                                        .background(Theme.accentColor)
+                                        .foregroundStyle(.white)
+                                        .clipShape(Capsule())
+                                        .padding(4)
+                                }
+                            }
                     }
                     if vm.images.count < Constants.maxListingImages {
                         PhotosPicker(selection: $vm.photoItems, maxSelectionCount: Constants.maxListingImages - vm.images.count, matching: .images) {
                             VStack(spacing: 6) {
                                 Image(systemName: "camera.badge.ellipsis").font(.title2)
-                                Text("Add").font(.caption)
+                                Text("Add Photo").font(.caption.weight(.medium))
                             }
                             .frame(maxWidth: .infinity, minHeight: 100)
                             .background(Theme.card)
                             .clipShape(RoundedRectangle(cornerRadius: 12))
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 12)
+                                    .stroke(Theme.accentColor.opacity(0.3), style: StrokeStyle(lineWidth: 1.5, dash: [5]))
+                            )
                         }
                     }
                 }
+
+                // Photo tips
+                VStack(alignment: .leading, spacing: 10) {
+                    Text("Photo Tips").font(.subheadline.weight(.semibold))
+                    photoTip(icon: "sun.max.fill", text: "Use natural lighting for the clearest shots", color: .orange)
+                    photoTip(icon: "rectangle.dashed", text: "Fill the frame — center your item", color: .blue)
+                    photoTip(icon: "sparkles", text: "Clean the item before photographing", color: .purple)
+                    photoTip(icon: "camera.metering.center.weighted", text: "Show any wear or damage honestly", color: .red)
+                }
+                .padding()
+                .background(Theme.card)
+                .clipShape(RoundedRectangle(cornerRadius: 14))
+
+                if vm.images.isEmpty {
+                    HStack(spacing: 8) {
+                        Image(systemName: "info.circle.fill").foregroundStyle(Theme.accentColor)
+                        Text("At least one photo is required to publish your listing.")
+                            .font(.caption).foregroundStyle(Theme.mutedText)
+                    }
+                    .padding(.horizontal, 4)
+                }
             }
             .padding()
+        }
+    }
+
+    private func photoTip(icon: String, text: String, color: Color) -> some View {
+        HStack(spacing: 10) {
+            Image(systemName: icon)
+                .font(.system(size: 14))
+                .foregroundStyle(color)
+                .frame(width: 28, height: 28)
+                .background(color.opacity(0.12))
+                .clipShape(Circle())
+            Text(text).font(.caption).foregroundStyle(Theme.mutedText)
         }
     }
 }
@@ -148,8 +203,17 @@ struct DetailsStepView: View {
 
     var body: some View {
         Form {
+            Section {
+                Text("Step 2 of 3 — Details")
+                    .font(.caption.weight(.semibold))
+                    .foregroundStyle(Theme.accentColor)
+                Text("Tell buyers about your item")
+                    .font(.title3.bold())
+            }
+            .listRowBackground(Color.clear)
+
             Section("Listing Details") {
-                TextField("Title", text: $vm.title)
+                TextField("Title", text: $vm.title, prompt: Text("e.g. Calculus: Early Transcendentals"))
                 TextField("Course Code (e.g. SOFT1101)", text: $vm.courseCode)
                     .autocapitalization(.allCharacters)
 
@@ -161,10 +225,10 @@ struct DetailsStepView: View {
                 Picker("Condition", selection: $vm.condition) {
                     ForEach(Condition.allCases) { Text($0.displayName).tag($0) }
                 }
-                .pickerStyle(.menu)
+                .pickerStyle(.segmented)
             }
 
-            Section("Price") {
+            Section {
                 HStack {
                     Text("QAR")
                         .foregroundStyle(Theme.mutedText)
@@ -175,11 +239,23 @@ struct DetailsStepView: View {
                     Label("Price must be between 0 and 10,000 QAR", systemImage: "info.circle")
                         .font(.caption).foregroundStyle(.orange)
                 }
+            } header: {
+                Text("Price")
+            } footer: {
+                if vm.price > 0 {
+                    Text("After the 10% platform fee, you'll receive \(Formatters.currencyShort((vm.price * 0.9).roundedTo2())).")
+                        .font(.caption)
+                }
             }
 
-            Section("Description") {
+            Section {
                 TextEditor(text: $vm.description)
-                    .frame(minHeight: 100)
+                    .frame(minHeight: 120)
+            } header: {
+                Text("Description")
+            } footer: {
+                Text("Include details like edition, highlighting, notes, or any damage. Listings with detailed descriptions sell 40% faster.")
+                    .font(.caption)
             }
 
             if let error = vm.errorMessage {

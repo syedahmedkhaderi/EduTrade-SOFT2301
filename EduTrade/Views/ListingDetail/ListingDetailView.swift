@@ -10,6 +10,7 @@ struct ListingDetailView: View {
     @State private var showCheckout = false
     @State private var showReportSheet = false
     @State private var currentImageIndex = 0
+    @State private var isSaved = false
 
     var body: some View {
         ScrollView {
@@ -90,10 +91,16 @@ struct ListingDetailView: View {
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
-                Button { showReportSheet = true } label: {
-                    Image(systemName: "flag")
+                HStack(spacing: 16) {
+                    Button { toggleSave() } label: {
+                        Image(systemName: isSaved ? "bookmark.fill" : "bookmark")
+                    }
+                    .accessibilityLabel(isSaved ? "Remove from saved" : "Save listing")
+                    Button { showReportSheet = true } label: {
+                        Image(systemName: "flag")
+                    }
+                    .accessibilityLabel("Report listing")
                 }
-                .accessibilityLabel("Report listing")
             }
         }
         .safeAreaInset(edge: .bottom) {
@@ -109,7 +116,24 @@ struct ListingDetailView: View {
         .sheet(isPresented: $showReportSheet) {
             ReportSheet(vm: vm) { Task { _ = await vm.report() } }
         }
-        .task { await vm.load(listingID: listingID) }
+        .task {
+            await vm.load(listingID: listingID)
+            isSaved = UserDefaults.standard.stringArray(forKey: "savedListingIDs")?.contains(listingID) ?? false
+        }
+    }
+
+    private func toggleSave() {
+        var saved = UserDefaults.standard.stringArray(forKey: "savedListingIDs") ?? []
+        if saved.contains(listingID) {
+            saved.removeAll { $0 == listingID }
+            isSaved = false
+            appState.toasts.info("Removed from saved items")
+        } else {
+            saved.append(listingID)
+            isSaved = true
+            appState.toasts.success("Saved to your list")
+        }
+        UserDefaults.standard.set(saved, forKey: "savedListingIDs")
     }
 
     private func checkoutBar(listing: Listing) -> some View {
