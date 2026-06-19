@@ -36,7 +36,7 @@ final class EduTradeUITests: XCTestCase {
         let emailField = app.textFields["University Email"]
         let passwordField = app.secureTextFields["Password"]
         emailField.tap()
-        emailField.typeText("ahmed.mansoori@udst.edu.qa")
+        emailField.typeText("syed.khaderi@udst.edu.qa")
         passwordField.tap()
         passwordField.typeText("password123")
 
@@ -91,7 +91,7 @@ final class EduTradeUITests: XCTestCase {
         let emailField = app.textFields["University Email"]
         let passwordField = app.secureTextFields["Password"]
         emailField.tap()
-        emailField.typeText("ahmed.mansoori@udst.edu.qa")
+        emailField.typeText("syed.khaderi@udst.edu.qa")
         passwordField.tap()
         passwordField.typeText("password123")
         app.buttons["Sign In"].tap()
@@ -111,7 +111,7 @@ final class EduTradeUITests: XCTestCase {
         // Login
         app.buttons["signInButton"].tap()
         app.textFields["University Email"].tap()
-        app.textFields["University Email"].typeText("ahmed.mansoori@udst.edu.qa")
+        app.textFields["University Email"].typeText("syed.khaderi@udst.edu.qa")
         app.secureTextFields["Password"].tap()
         app.secureTextFields["Password"].typeText("password123")
         app.buttons["Sign In"].tap()

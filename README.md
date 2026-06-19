@@ -40,7 +40,7 @@ xcodebuild -project EduTrade.xcodeproj -scheme EduTrade \
 
 | Role | Email | Password |
 | --- | --- | --- |
-| Student | `ahmed.mansoori@udst.edu.qa` | `password123` |
+| Student | `syed.khaderi@udst.edu.qa` | `password123` |
 | Admin | `admin@udst.edu.qa` | `admin123` |
 
 ## Notes

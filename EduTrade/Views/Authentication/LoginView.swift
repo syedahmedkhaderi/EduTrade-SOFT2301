@@ -36,7 +36,7 @@ struct LoginView: View {
                 Text("Sign In")
             } footer: {
                 VStack(alignment: .leading, spacing: 6) {
-                    Text("Demo student: ahmed.mansoori@udst.edu.qa")
+                    Text("Demo student: syed.khaderi@udst.edu.qa")
                     Text("Demo admin: admin@udst.edu.qa")
                     Text("Password: password123 (admin: admin123)")
                 }

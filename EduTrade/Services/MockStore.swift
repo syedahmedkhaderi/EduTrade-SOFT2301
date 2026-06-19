@@ -3,7 +3,7 @@ import Foundation
 /// A single in-memory data store backing all mock services.
 /// Concurrency-safe actor. State persists across app launches via JSON on disk.
 actor MockStore {
-    private let currentSeedVersion = 5
+    private let currentSeedVersion = 6
 
     // MARK: - State
 
@@ -61,15 +61,15 @@ actor MockStore {
         // --- Demo student ---
         let demo = User(
             id: "student-demo",
-            fullName: "Ahmed Al-Mansoori",
-            universityEmail: "ahmed.mansoori@udst.edu.qa",
+            fullName: "Syed Ahmed Khaderi",
+            universityEmail: "syed.khaderi@udst.edu.qa",
             isEmailVerified: true,
             profileImageURL: nil,
             averageRating: 4.8,
             totalRatings: 12
         )
         users.append(demo)
-        credentials["ahmed.mansoori@udst.edu.qa"] = "password123"
+        credentials["syed.khaderi@udst.edu.qa"] = "password123"
 
         // --- More students (sellers) ---
         let otherStudents: [(String, String, Double, Int)] = [

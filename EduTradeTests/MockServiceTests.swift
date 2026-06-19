@@ -61,13 +61,13 @@ final class MockServiceTests: XCTestCase {
 
     func testLoginWithValidCredentials() async throws {
         // Seeded demo user
-        let user = try await auth.login(email: "ahmed.mansoori@udst.edu.qa", password: "password123")
-        XCTAssertEqual(user.universityEmail, "ahmed.mansoori@udst.edu.qa")
+        let user = try await auth.login(email: "syed.khaderi@udst.edu.qa", password: "password123")
+        XCTAssertEqual(user.universityEmail, "syed.khaderi@udst.edu.qa")
     }
 
     func testLoginWithWrongPasswordFails() async {
         do {
-            _ = try await auth.login(email: "ahmed.mansoori@udst.edu.qa", password: "wrongpass")
+            _ = try await auth.login(email: "syed.khaderi@udst.edu.qa", password: "wrongpass")
             XCTFail("Should have thrown")
         } catch {
             // expected
@@ -85,7 +85,7 @@ final class MockServiceTests: XCTestCase {
     // MARK: - Listings
 
     func testCreateListingAndFetch() async throws {
-        let seller = try await auth.login(email: "ahmed.mansoori@udst.edu.qa", password: "password123")
+        let seller = try await auth.login(email: "syed.khaderi@udst.edu.qa", password: "password123")
         let listing = Listing(
             sellerID: seller.id, title: "Physics Book", description: "Clean",
             courseCode: "PHYS1302", subject: "Applied Sciences", price: 150, condition: .good, imageURLs: ["p"]
@@ -158,7 +158,7 @@ final class MockServiceTests: XCTestCase {
     }
 
     func testCannotBuyOwnListing() async throws {
-        let seller = try await auth.login(email: "ahmed.mansoori@udst.edu.qa", password: "password123")
+        let seller = try await auth.login(email: "syed.khaderi@udst.edu.qa", password: "password123")
         let listing = Listing(sellerID: seller.id, title: "Own Item", description: "d", courseCode: "C", subject: "S", price: 50, condition: .good, imageURLs: ["i"])
         let created = try await listings.createListing(listing)
         do {
