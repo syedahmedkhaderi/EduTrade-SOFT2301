@@ -3,7 +3,7 @@ import Foundation
 /// A single in-memory data store backing all mock services.
 /// Concurrency-safe actor. State persists across app launches via JSON on disk.
 actor MockStore {
-    private let currentSeedVersion = 3
+    private let currentSeedVersion = 5
 
     // MARK: - State
 
@@ -95,26 +95,26 @@ actor MockStore {
 
         // --- Listings ---
         let sampleImageAssets = (
-            pythonBook: "textbook-python",
-            graphingCalculator: "item-graphing-calculator",
-            anatomyManual: "textbook-anatomy",
-            stethoscope: "item-stethoscope",
-            mechanicsBook: "textbook-mechanics",
-            draftingTools: "labkit-drawing",
-            businessStatsBook: "textbook-stats",
-            scientificCalculator: "textbook-precalc",
-            digitalBook: "textbook-digital",
+            pythonBook: "seed-photo-01",
+            graphingCalculator: "seed-photo-02",
+            anatomyManual: "seed-photo-11",
+            stethoscope: "seed-photo-04",
+            mechanicsBook: "seed-photo-05",
+            draftingTools: "seed-photo-06",
+            businessStatsBook: "seed-photo-07",
+            scientificCalculator: "item-graphing-calculator",
+            digitalBook: "seed-photo-08",
             multimeter: "item-multimeter",
-            calculusBook: "textbook-calculus",
+            calculusBook: "seed-photo-09",
             safetyGoggles: "item-safety-goggles",
-            databaseBook: "textbook-database",
-            englishNotes: "notes-english",
-            networkBook: "textbook-network",
+            databaseBook: "seed-photo-10",
+            englishNotes: "seed-photo-15",
+            networkBook: "seed-photo-03",
             laptopDesk: "item-laptop-desk",
-            labGoggles: "textbook-organic",
-            welding: "labkit-welding",
-            physicsBook: "textbook-physics",
-            microbioNotes: "notes-microbio"
+            labGoggles: "seed-photo-17",
+            welding: "seed-photo-18",
+            physicsBook: "seed-photo-19",
+            microbioNotes: "seed-photo-20"
         )
 
         let sampleListings: [(String, String, String, String, Double, Condition, String, Int)] = [
