@@ -90,107 +90,122 @@ actor MockStore {
         }
 
         // --- Listings ---
+        let sampleImageURLs = (
+            openBook: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d6/Open_book_1_%28Unsplash%29.jpg/1200px-Open_book_1_%28Unsplash%29.jpg",
+            graphingCalculator: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c4/Graphing_calculator.JPG/1200px-Graphing_calculator.JPG",
+            stethoscope: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/75/Stethoscope_1.jpg/1200px-Stethoscope_1.jpg",
+            draftingTools: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/Drafting_board_with_T_square_and_drawingtools.jpg/1200px-Drafting_board_with_T_square_and_drawingtools.jpg",
+            scientificCalculator: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f4/Solar-calculator.jpg/1200px-Solar-calculator.jpg",
+            multimeter: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a6/Digital_Multimeter_Aka.jpg/1200px-Digital_Multimeter_Aka.jpg",
+            welding: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/72/Shielded_Metal_Arc_Welding.jpg/1200px-Shielded_Metal_Arc_Welding.jpg",
+            safetyGoggles: "https://shop.scienceaide.com/wp-content/uploads/2023/12/550A3872-2.png",
+            labGoggles: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/89/Laboratory_protection_goggles-blue.jpg/1200px-Laboratory_protection_goggles-blue.jpg",
+            laptopDesk: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8b/Laptop_on_a_neat_desk_%28Unsplash%29.jpg/1200px-Laptop_on_a_neat_desk_%28Unsplash%29.jpg",
+            studyDesk: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/74/Laptop_and_coffee_on_a_desk.jpg/1200px-Laptop_and_coffee_on_a_desk.jpg",
+            studyStack: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c0/Laptop_on_desk_book_stacks_%28Unsplash%29.jpg/1200px-Laptop_on_desk_book_stacks_%28Unsplash%29.jpg"
+        )
+
         let sampleListings: [(String, String, String, String, Double, Condition, String, Int)] = [
-            // title, desc, course, subject, price, condition, imageKey, sellerIndex
+            // title, desc, course, subject, price, condition, imageURL, sellerIndex
             ("Intro to Python Programming",
-             "Used for SOFT1101. Highlighting and pencil notes in first 3 chapters. No missing pages. Great for first-year IT students.",
+             "Used for SOFT1101. Clean pages, a few sticky tabs, and one summary sheet tucked inside.",
              "SOFT1101", "Computer Science", 90.0, .good,
-             "textbook-python", 1),
+             sampleImageURLs.openBook, 1),
 
-            ("Engineering Mechanics: Statics",
-             "Hibbeler 14th edition. Hardcover in excellent condition. Used for MECH1201.",
-             "MECH1201", "Engineering", 180.0, .likeNew,
-             "textbook-mechanics", 2),
-
-            ("Principles of Management",
-             "Robbins & Coulter. Lightly used. Minor highlighting in chapter 4-6.",
-             "BUSI1301", "Business", 75.0, .fair,
-             "textbook-management", 3),
+            ("TI-84 Plus Graphing Calculator",
+             "Used through MATH1401 and MATH1301. Fresh batteries included and all keys work perfectly.",
+             "MATH1401", "Mathematics", 210.0, .likeNew,
+             sampleImageURLs.graphingCalculator, 2),
 
             ("Human Anatomy & Physiology Lab Manual",
-             "Marieb. Used for HSCI2103. No filled-in pages. Spiral binding intact.",
+             "Used for HSCI2103. Spiral binding intact and no pages filled in.",
              "HSCI2103", "Health Sciences", 65.0, .good,
-             "textbook-anatomy", 4),
+             sampleImageURLs.studyStack, 4),
 
-            ("Calculus: Early Transcendentals",
-             "Stewart 8th edition. Hardcover. Great condition. Used for MATH1401.",
-             "MATH1401", "Mathematics", 220.0, .likeNew,
-             "textbook-calculus", 5),
+            ("Clinical Stethoscope Starter Kit",
+             "Ideal for first-year nursing labs. Includes soft case and spare ear tips.",
+             "NURS1202", "Health Sciences", 145.0, .likeNew,
+             sampleImageURLs.stethoscope, 5),
 
-            ("Data Structures & Algorithms in Java",
-             "Robert Lafore. Slightly worn cover, pages clean. Used for SOFT2202.",
-             "SOFT2202", "Computer Science", 110.0, .good,
-             "textbook-dsa", 1),
+            ("Engineering Mechanics: Statics",
+             "Hibbeler 14th edition. Hardcover with only light shelf wear.",
+             "MECH1201", "Engineering", 180.0, .likeNew,
+             sampleImageURLs.openBook, 2),
 
-            ("Digital Fundamentals",
-             "Floyd. Paperback. Excellent condition. Used for ELCT1301.",
-             "ELCT1301", "Electrical", 95.0, .new,
-             "textbook-digital", 6),
-
-            ("Organic Chemistry Textbook",
-             "Clayden 2nd edition. Minor water damage on back cover, otherwise clean.",
-             "CHEM2401", "Applied Sciences", 130.0, .fair,
-             "textbook-organic", 7),
+            ("Mechanical Drawing Kit",
+             "T-square, triangles, compass set, and mechanical pencils for MECH1102 drafting labs.",
+             "MECH1102", "Industrial Trades", 150.0, .good,
+             sampleImageURLs.draftingTools, 3),
 
             ("Introduction to Business Statistics",
-             "Used for BUSI2305. Some chapters have pencil notes. Includes formula sheet.",
+             "Used for BUSI2305. Includes a formula sheet and neat pencil annotations.",
              "BUSI2305", "Business", 80.0, .good,
-             "textbook-stats", 2),
+             sampleImageURLs.openBook, 2),
 
-            ("Mechanical Engineering Drawing Kit",
-             "Complete drafting kit: T-square, triangles, compass, protractor. Excellent for MECH1102.",
-             "MECH1102", "Industrial Trades", 150.0, .good,
-             "labkit-drawing", 3),
+            ("Casio Scientific Calculator",
+             "Great for foundation math and physics classes. Screen is clear and solar panel works well.",
+             "MATH1301", "Mathematics", 55.0, .good,
+             sampleImageURLs.scientificCalculator, 6),
 
-            ("Welding Fundamentals Lab Kit",
-             "Safety goggles, gloves, and practice materials. Barely used.",
-             "WELD1201", "Industrial Trades", 120.0, .likeNew,
-             "labkit-welding", 4),
+            ("Digital Fundamentals",
+             "Used for ELCT1301. Excellent condition with no missing pages or folds.",
+             "ELCT1301", "Electrical", 95.0, .new,
+             sampleImageURLs.openBook, 6),
 
-            ("English Academic Writing Guide",
-             "Used for ENGL1001. Notes and annotations throughout. Still very usable.",
-             "ENGL1001", "English Language", 40.0, .fair,
-             "notes-english", 5),
+            ("Digital Multimeter for Circuits Lab",
+             "Reliable student meter for ELCT2201. Comes with test leads and pouch.",
+             "ELCT2201", "Electrical", 95.0, .good,
+             sampleImageURLs.multimeter, 4),
 
-            ("Network+ Certification Study Guide",
-             "Exam N10-008. Like new, no highlighting. Used for ITEC2401.",
-             "ITEC2401", "Information Technology", 140.0, .likeNew,
-             "textbook-network", 6),
+            ("Calculus: Early Transcendentals",
+             "Stewart 8th edition. Hardcover in strong condition and ideal for MATH1401.",
+             "MATH1401", "Mathematics", 220.0, .likeNew,
+             sampleImageURLs.openBook, 5),
 
-            ("Microbiology Lecture Notes (Printed)",
-             "Complete semester notes printed and bound. Covers HSCI2204. Clean copy.",
-             "HSCI2204", "Health Sciences", 50.0, .good,
-             "notes-microbio", 7),
-
-            ("Physics for Scientists & Engineers",
-             "Serway 10th edition. Hardcover. Excellent condition. Used for PHYS1302.",
-             "PHYS1302", "Applied Sciences", 200.0, .new,
-             "textbook-physics", 1),
-
-            ("Financial Accounting Textbook",
-             "Weygandt, Kimmel, Kieso. Like new. Used for ACCT1201.",
-             "ACCT1201", "Business", 160.0, .likeNew,
-             "textbook-accounting", 2),
-
-            ("C++ Programming: From Problem Analysis",
-             "Malik 8th edition. Slightly worn cover. Used for SOFT1202.",
-             "SOFT1202", "Computer Science", 85.0, .good,
-             "textbook-cpp", 3),
-
-            ("Electronic Devices & Circuit Theory",
-             "Boylestad. Hardcover. Minor highlighting. Used for ELCT2201.",
-             "ELCT2201", "Electrical", 170.0, .good,
-             "textbook-electronic", 4),
-
-            ("Precalculus: Mathematics for Calculus",
-             "Stewart. Paperback. Light wear. Used for MATH1301.",
-             "MATH1301", "Mathematics", 70.0, .fair,
-             "textbook-precalc", 5),
+            ("Safety Goggles + Lab Apron Set",
+             "Packed for chemistry and biology practicals. Goggles are anti-fog and apron is freshly cleaned.",
+             "CHEM1401", "Applied Sciences", 60.0, .likeNew,
+             sampleImageURLs.safetyGoggles, 7),
 
             ("Database Systems Design",
-             "Connolly & Begg 7th edition. Excellent condition. Used for SOFT2301.",
+             "Connolly & Begg 7th edition. Excellent condition for SOFT2301 students.",
              "SOFT2301", "Computer Science", 145.0, .likeNew,
-             "textbook-database", 6)
+             sampleImageURLs.openBook, 6),
+
+            ("English Academic Writing Notes Bundle",
+             "Bound lecture notes, essay structure templates, and sample citation pages for ENGL1001.",
+             "ENGL1001", "English Language", 40.0, .good,
+             sampleImageURLs.studyDesk, 5),
+
+            ("Network+ Certification Study Guide",
+             "Exam N10-008 prep guide. Minimal highlighting and a clean cover.",
+             "ITEC2401", "Information Technology", 140.0, .likeNew,
+             sampleImageURLs.laptopDesk, 6),
+
+            ("Laptop Stand + Wireless Keyboard Combo",
+             "Great for programming sessions in the library or dorm. Folds flat into a backpack.",
+             "SOFT2202", "Information Technology", 175.0, .likeNew,
+             sampleImageURLs.laptopDesk, 1),
+
+            ("Organic Chemistry Flashcards + Lab Notebook",
+             "Revision deck plus a half-used but tidy lab notebook for CHEM2401.",
+             "CHEM2401", "Applied Sciences", 45.0, .good,
+             sampleImageURLs.labGoggles, 7),
+
+            ("Welding Fundamentals PPE Starter Pack",
+             "Protective gloves, sleeves, and practice consumables prepared for WELD1201 labs.",
+             "WELD1201", "Industrial Trades", 120.0, .likeNew,
+             sampleImageURLs.welding, 4),
+
+            ("Physics Problem-Solving Binder",
+             "Worked examples, quizzes, and equation sheets organized for PHYS1302.",
+             "PHYS1302", "Applied Sciences", 55.0, .good,
+             sampleImageURLs.studyStack, 1),
+
+            ("Microbiology Lecture Notes (Printed)",
+             "Complete semester notes printed and bound for HSCI2204 with clear section tabs.",
+             "HSCI2204", "Health Sciences", 50.0, .good,
+             sampleImageURLs.studyDesk, 7)
         ]
 
         for (idx, listing) in sampleListings.enumerated() {

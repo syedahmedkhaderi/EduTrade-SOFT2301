@@ -125,7 +125,7 @@
 		A8097978DE52E93E47146800 /* Transaction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Transaction.swift; sourceTree = "<group>"; };
 		AA85E5A91EB099DA25B9C35E /* EduTradeTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = EduTradeTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		B29C8709ED1FA00737C72474 /* RatingService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatingService.swift; sourceTree = "<group>"; };
-		B43242952AD45483C5E65096 /* EduTrade.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = EduTrade.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		B43242952AD45483C5E65096 /* EduTrade.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EduTrade.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B623FDD2E61FDA6779AD32EC /* MockStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockStore.swift; sourceTree = "<group>"; };
 		B93FABC94957FB3B75B4F885 /* AdminDashboardViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdminDashboardViewModel.swift; sourceTree = "<group>"; };
 		B99559D9091CADAFA314A1C0 /* EduTradeUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EduTradeUITests.swift; sourceTree = "<group>"; };
@@ -711,6 +711,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				DEVELOPMENT_TEAM = Q2N2N3GH2B;
 				INFOPLIST_FILE = EduTrade/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = EduTrade;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -830,6 +831,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				DEVELOPMENT_TEAM = Q2N2N3GH2B;
 				INFOPLIST_FILE = EduTrade/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = EduTrade;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

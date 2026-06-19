@@ -87,7 +87,7 @@ struct SearchView: View {
             // Footer tip
             HStack(spacing: 8) {
                 Image(systemName: "lightbulb.fill").foregroundStyle(.orange)
-                Text("Tip: Search by course code (e.g. SOFT1101) to find exact materials for your classes.")
+                Text("Tip: Search by course code (e.g. SOFT1101) or item type to find exact materials for your classes.")
                     .font(.caption).foregroundStyle(Theme.mutedText)
             }
             .padding(.top, 8)
@@ -98,7 +98,7 @@ struct SearchView: View {
     private var suggestionChips: some View {
         ScrollView(.horizontal, showsIndicators: false) {
             HStack(spacing: 8) {
-                ForEach(["Textbooks", "Notes", "Lab Kits", "SOFT", "MATH", "Engineering"], id: \.self) { term in
+                ForEach(["Textbooks", "Notes", "Calculators", "Lab Kits", "SOFT", "MATH"], id: \.self) { term in
                     Button {
                         Task { await vm.searchBySuggestion(term) }
                     } label: {

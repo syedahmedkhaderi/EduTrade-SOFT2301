@@ -416,7 +416,7 @@ struct AboutView: View {
                     aboutRow(icon: "graduationcap.fill", title: "Built for UDST",
                              text: "EduTrade is a peer-to-peer marketplace exclusively for University of Doha for Science and Technology students.")
                     aboutRow(icon: "handshake.fill", title: "Buy & Sell",
-                             text: "List textbooks, lab kits, and notes. Browse by course code or subject. Secure payments with 10% platform fee.")
+                             text: "List textbooks, calculators, instruments, lab kits, and notes. Browse by course code or subject with secure checkout.")
                     aboutRow(icon: "shield.fill", title: "Verified & Trusted",
                              text: "All users verify with their @udst.edu.qa email. Rate transactions to build trust in the community.")
                     aboutRow(icon: "globe", title: "Bilingual",

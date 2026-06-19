@@ -17,9 +17,9 @@ struct HomeFeedView: View {
                     loadingState
                 } else if vm.listings.isEmpty {
                     EmptyStateView(
-                        symbol: "books.vertical",
+                        symbol: "shippingbox",
                         title: "No listings yet",
-                        subtitle: "Be the first to sell something on EduTrade."
+                        subtitle: "Be the first to list books, calculators, kits, or notes on EduTrade."
                     )
                     .padding(.top, 60)
                 } else {
@@ -51,7 +51,7 @@ struct HomeFeedView: View {
             .background(Theme.background)
             .navigationTitle("EduTrade")
             .navigationBarTitleDisplayMode(.large)
-            .searchable(text: .constant(""), prompt: "Search textbooks, course codes…")
+            .searchable(text: .constant(""), prompt: "Search books, calculators, kits, notes…")
             .onSubmit(of: .search) {
                 appState.tabSelection = 1
             }
