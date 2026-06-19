@@ -3,6 +3,7 @@ import Foundation
 /// A single in-memory data store backing all mock services.
 /// Concurrency-safe actor. State persists across app launches via JSON on disk.
 actor MockStore {
+    private let currentSeedVersion = 2
 
     // MARK: - State
 
@@ -17,6 +18,7 @@ actor MockStore {
 
     /// In-flight created-but-not-yet-verified users.
     private var pendingVerification: Set<String> = []
+    private var storedSeedVersion: Int = 0
 
     // MARK: - Persistence
 
@@ -30,7 +32,9 @@ actor MockStore {
 
     func bootstrap() {
         loadFromDisk()
-        if users.isEmpty {
+        if storedSeedVersion < currentSeedVersion {
+            resetAll()
+        } else if users.isEmpty {
             seed()
             saveToDisk()
         }
@@ -90,122 +94,122 @@ actor MockStore {
         }
 
         // --- Listings ---
-        let sampleImageURLs = (
-            openBook: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d6/Open_book_1_%28Unsplash%29.jpg/1200px-Open_book_1_%28Unsplash%29.jpg",
-            graphingCalculator: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c4/Graphing_calculator.JPG/1200px-Graphing_calculator.JPG",
-            stethoscope: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/75/Stethoscope_1.jpg/1200px-Stethoscope_1.jpg",
-            draftingTools: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/Drafting_board_with_T_square_and_drawingtools.jpg/1200px-Drafting_board_with_T_square_and_drawingtools.jpg",
-            scientificCalculator: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f4/Solar-calculator.jpg/1200px-Solar-calculator.jpg",
-            multimeter: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a6/Digital_Multimeter_Aka.jpg/1200px-Digital_Multimeter_Aka.jpg",
-            welding: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/72/Shielded_Metal_Arc_Welding.jpg/1200px-Shielded_Metal_Arc_Welding.jpg",
-            safetyGoggles: "https://shop.scienceaide.com/wp-content/uploads/2023/12/550A3872-2.png",
-            labGoggles: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/89/Laboratory_protection_goggles-blue.jpg/1200px-Laboratory_protection_goggles-blue.jpg",
-            laptopDesk: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8b/Laptop_on_a_neat_desk_%28Unsplash%29.jpg/1200px-Laptop_on_a_neat_desk_%28Unsplash%29.jpg",
-            studyDesk: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/74/Laptop_and_coffee_on_a_desk.jpg/1200px-Laptop_and_coffee_on_a_desk.jpg",
-            studyStack: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c0/Laptop_on_desk_book_stacks_%28Unsplash%29.jpg/1200px-Laptop_on_desk_book_stacks_%28Unsplash%29.jpg"
+        let sampleImageAssets = (
+            openBook: "item-open-book",
+            graphingCalculator: "item-graphing-calculator",
+            stethoscope: "item-stethoscope",
+            draftingTools: "item-drafting-tools",
+            scientificCalculator: "item-scientific-calculator",
+            multimeter: "item-multimeter",
+            welding: "item-welding-ppe",
+            safetyGoggles: "item-safety-goggles",
+            labGoggles: "item-lab-goggles",
+            laptopDesk: "item-laptop-desk",
+            studyDesk: "item-study-desk",
+            studyStack: "item-study-stack"
         )
 
         let sampleListings: [(String, String, String, String, Double, Condition, String, Int)] = [
-            // title, desc, course, subject, price, condition, imageURL, sellerIndex
+            // title, desc, course, subject, price, condition, imageAsset, sellerIndex
             ("Intro to Python Programming",
              "Used for SOFT1101. Clean pages, a few sticky tabs, and one summary sheet tucked inside.",
              "SOFT1101", "Computer Science", 90.0, .good,
-             sampleImageURLs.openBook, 1),
+             sampleImageAssets.openBook, 1),
 
             ("TI-84 Plus Graphing Calculator",
              "Used through MATH1401 and MATH1301. Fresh batteries included and all keys work perfectly.",
              "MATH1401", "Mathematics", 210.0, .likeNew,
-             sampleImageURLs.graphingCalculator, 2),
+             sampleImageAssets.graphingCalculator, 2),
 
             ("Human Anatomy & Physiology Lab Manual",
              "Used for HSCI2103. Spiral binding intact and no pages filled in.",
              "HSCI2103", "Health Sciences", 65.0, .good,
-             sampleImageURLs.studyStack, 4),
+             sampleImageAssets.studyStack, 4),
 
             ("Clinical Stethoscope Starter Kit",
              "Ideal for first-year nursing labs. Includes soft case and spare ear tips.",
              "NURS1202", "Health Sciences", 145.0, .likeNew,
-             sampleImageURLs.stethoscope, 5),
+             sampleImageAssets.stethoscope, 5),
 
             ("Engineering Mechanics: Statics",
              "Hibbeler 14th edition. Hardcover with only light shelf wear.",
              "MECH1201", "Engineering", 180.0, .likeNew,
-             sampleImageURLs.openBook, 2),
+             sampleImageAssets.openBook, 2),
 
             ("Mechanical Drawing Kit",
              "T-square, triangles, compass set, and mechanical pencils for MECH1102 drafting labs.",
              "MECH1102", "Industrial Trades", 150.0, .good,
-             sampleImageURLs.draftingTools, 3),
+             sampleImageAssets.draftingTools, 3),
 
             ("Introduction to Business Statistics",
              "Used for BUSI2305. Includes a formula sheet and neat pencil annotations.",
              "BUSI2305", "Business", 80.0, .good,
-             sampleImageURLs.openBook, 2),
+             sampleImageAssets.openBook, 2),
 
             ("Casio Scientific Calculator",
              "Great for foundation math and physics classes. Screen is clear and solar panel works well.",
              "MATH1301", "Mathematics", 55.0, .good,
-             sampleImageURLs.scientificCalculator, 6),
+             sampleImageAssets.scientificCalculator, 6),
 
             ("Digital Fundamentals",
              "Used for ELCT1301. Excellent condition with no missing pages or folds.",
              "ELCT1301", "Electrical", 95.0, .new,
-             sampleImageURLs.openBook, 6),
+             sampleImageAssets.openBook, 6),
 
             ("Digital Multimeter for Circuits Lab",
              "Reliable student meter for ELCT2201. Comes with test leads and pouch.",
              "ELCT2201", "Electrical", 95.0, .good,
-             sampleImageURLs.multimeter, 4),
+             sampleImageAssets.multimeter, 4),
 
             ("Calculus: Early Transcendentals",
              "Stewart 8th edition. Hardcover in strong condition and ideal for MATH1401.",
              "MATH1401", "Mathematics", 220.0, .likeNew,
-             sampleImageURLs.openBook, 5),
+             sampleImageAssets.openBook, 5),
 
             ("Safety Goggles + Lab Apron Set",
              "Packed for chemistry and biology practicals. Goggles are anti-fog and apron is freshly cleaned.",
              "CHEM1401", "Applied Sciences", 60.0, .likeNew,
-             sampleImageURLs.safetyGoggles, 7),
+             sampleImageAssets.safetyGoggles, 7),
 
             ("Database Systems Design",
              "Connolly & Begg 7th edition. Excellent condition for SOFT2301 students.",
              "SOFT2301", "Computer Science", 145.0, .likeNew,
-             sampleImageURLs.openBook, 6),
+             sampleImageAssets.openBook, 6),
 
             ("English Academic Writing Notes Bundle",
              "Bound lecture notes, essay structure templates, and sample citation pages for ENGL1001.",
              "ENGL1001", "English Language", 40.0, .good,
-             sampleImageURLs.studyDesk, 5),
+             sampleImageAssets.studyDesk, 5),
 
             ("Network+ Certification Study Guide",
              "Exam N10-008 prep guide. Minimal highlighting and a clean cover.",
              "ITEC2401", "Information Technology", 140.0, .likeNew,
-             sampleImageURLs.laptopDesk, 6),
+             sampleImageAssets.laptopDesk, 6),
 
             ("Laptop Stand + Wireless Keyboard Combo",
              "Great for programming sessions in the library or dorm. Folds flat into a backpack.",
              "SOFT2202", "Information Technology", 175.0, .likeNew,
-             sampleImageURLs.laptopDesk, 1),
+             sampleImageAssets.laptopDesk, 1),
 
             ("Organic Chemistry Flashcards + Lab Notebook",
              "Revision deck plus a half-used but tidy lab notebook for CHEM2401.",
              "CHEM2401", "Applied Sciences", 45.0, .good,
-             sampleImageURLs.labGoggles, 7),
+             sampleImageAssets.labGoggles, 7),
 
             ("Welding Fundamentals PPE Starter Pack",
              "Protective gloves, sleeves, and practice consumables prepared for WELD1201 labs.",
              "WELD1201", "Industrial Trades", 120.0, .likeNew,
-             sampleImageURLs.welding, 4),
+             sampleImageAssets.welding, 4),
 
             ("Physics Problem-Solving Binder",
              "Worked examples, quizzes, and equation sheets organized for PHYS1302.",
              "PHYS1302", "Applied Sciences", 55.0, .good,
-             sampleImageURLs.studyStack, 1),
+             sampleImageAssets.studyStack, 1),
 
             ("Microbiology Lecture Notes (Printed)",
              "Complete semester notes printed and bound for HSCI2204 with clear section tabs.",
              "HSCI2204", "Health Sciences", 50.0, .good,
-             sampleImageURLs.studyDesk, 7)
+             sampleImageAssets.studyDesk, 7)
         ]
 
         for (idx, listing) in sampleListings.enumerated() {
@@ -339,16 +343,37 @@ actor MockStore {
     // MARK: - Disk persistence
 
     struct Snapshot: Codable {
+        var seedVersion: Int
         var users: [User]
         var listings: [Listing]
         var transactions: [Transaction]
         var ratings: [Rating]
         var reports: [Report]
+
+        init(seedVersion: Int, users: [User], listings: [Listing], transactions: [Transaction], ratings: [Rating], reports: [Report]) {
+            self.seedVersion = seedVersion
+            self.users = users
+            self.listings = listings
+            self.transactions = transactions
+            self.ratings = ratings
+            self.reports = reports
+        }
+
+        init(from decoder: Decoder) throws {
+            let container = try decoder.container(keyedBy: CodingKeys.self)
+            seedVersion = try container.decodeIfPresent(Int.self, forKey: .seedVersion) ?? 0
+            users = try container.decode([User].self, forKey: .users)
+            listings = try container.decode([Listing].self, forKey: .listings)
+            transactions = try container.decode([Transaction].self, forKey: .transactions)
+            ratings = try container.decode([Rating].self, forKey: .ratings)
+            reports = try container.decode([Report].self, forKey: .reports)
+        }
     }
 
     private func loadFromDisk() {
         guard let data = try? Data(contentsOf: diskURL),
               let snap = try? JSONDecoder().decode(Snapshot.self, from: data) else { return }
+        storedSeedVersion = snap.seedVersion
         users = snap.users
         listings = snap.listings
         transactions = snap.transactions
@@ -357,7 +382,14 @@ actor MockStore {
     }
 
     func saveToDisk() {
-        let snap = Snapshot(users: users, listings: listings, transactions: transactions, ratings: ratings, reports: reports)
+        let snap = Snapshot(
+            seedVersion: currentSeedVersion,
+            users: users,
+            listings: listings,
+            transactions: transactions,
+            ratings: ratings,
+            reports: reports
+        )
         if let data = try? JSONEncoder().encode(snap) {
             try? data.write(to: diskURL, options: .atomic)
         }
@@ -371,6 +403,7 @@ actor MockStore {
         reports.removeAll()
         credentials.removeAll()
         pendingVerification.removeAll()
+        storedSeedVersion = currentSeedVersion
         seed()
         saveToDisk()
     }

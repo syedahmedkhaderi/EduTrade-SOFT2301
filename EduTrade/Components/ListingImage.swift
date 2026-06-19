@@ -1,8 +1,8 @@
 import SwiftUI
 
 /// Renders a listing photo.
-/// For bundled asset keys (mock seed data), loads the realistic textbook cover image.
-/// For real URLs, uses AsyncImage. Falls back to a branded placeholder if neither is found.
+/// Bundled asset names are used for seeded mock data.
+/// Remote URLs are still supported for uploaded or production-backed images.
 struct ListingImage: View {
     let imageKey: String?
     let title: String
