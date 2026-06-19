@@ -100,9 +100,9 @@ actor MockStore {
             anatomyManual: "textbook-anatomy",
             stethoscope: "item-stethoscope",
             mechanicsBook: "textbook-mechanics",
-            draftingTools: "item-drafting-tools",
+            draftingTools: "labkit-drawing",
             businessStatsBook: "textbook-stats",
-            scientificCalculator: "item-scientific-calculator",
+            scientificCalculator: "textbook-precalc",
             digitalBook: "textbook-digital",
             multimeter: "item-multimeter",
             calculusBook: "textbook-calculus",
@@ -111,10 +111,9 @@ actor MockStore {
             englishNotes: "notes-english",
             networkBook: "textbook-network",
             laptopDesk: "item-laptop-desk",
-            labGoggles: "item-lab-goggles",
-            welding: "item-welding-ppe",
+            labGoggles: "textbook-organic",
+            welding: "labkit-welding",
             physicsBook: "textbook-physics",
-            studyDesk: "item-study-desk",
             microbioNotes: "notes-microbio"
         )
 
