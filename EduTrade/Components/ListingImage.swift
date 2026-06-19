@@ -1,7 +1,8 @@
 import SwiftUI
 
-/// Renders a listing photo. For mock image keys, generates a branded gradient placeholder
-/// with the listing's initials. For real URLs, uses AsyncImage.
+/// Renders a listing photo.
+/// For bundled asset keys (mock seed data), loads the realistic textbook cover image.
+/// For real URLs, uses AsyncImage. Falls back to a branded placeholder if neither is found.
 struct ListingImage: View {
     let imageKey: String?
     let title: String
@@ -10,6 +11,7 @@ struct ListingImage: View {
     var body: some View {
         Group {
             if let key = imageKey, key.hasPrefix("http"), let url = URL(string: key) {
+                // Real remote URL (production)
                 AsyncImage(url: url) { phase in
                     switch phase {
                     case .empty:  placeholder
@@ -18,7 +20,12 @@ struct ListingImage: View {
                     @unknown default: placeholder
                     }
                 }
+            } else if let key = imageKey, let uiImage = UIImage(named: key) {
+                // Bundled asset (mock seed data — realistic textbook covers)
+                Image(uiImage: uiImage)
+                    .resizable()
             } else {
+                // Fallback branded placeholder
                 placeholder
             }
         }
@@ -48,7 +55,6 @@ struct ListingImage: View {
         return words.compactMap { $0.first }.map { String($0) }.joined().uppercased()
     }
 
-    /// Pick a representative SF Symbol based on the mock key.
     private func iconName(for key: String?) -> String {
         guard let key else { return "book" }
         if key.contains("textbook") { return "textbook" }
@@ -57,7 +63,6 @@ struct ListingImage: View {
         return "book"
     }
 
-    /// Stable gradient based on the title hash so each listing has distinct but consistent colors.
     private var gradientColors: [Color] {
         let palettes: [[Color]] = [
             [Color.teal, Color.blue],
