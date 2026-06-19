@@ -1,0 +1,92 @@
+/* EduTrade — English localization */
+
+// App
+"app.name" = "EduTrade";
+"app.tagline" = "Buy & sell used academic materials at UDST";
+
+// Conditions
+"condition_new" = "New";
+"condition_like_new" = "Like New";
+"condition_good" = "Good";
+"condition_fair" = "Fair";
+"condition_poor" = "Poor";
+
+// Validation
+"pwd_short" = "At least 8 characters";
+"pwd_weak" = "Include at least one letter and one number";
+"no_ratings" = "No ratings yet";
+"no_ratings_short" = "No ratings";
+
+// Welcome
+"welcome.create_account" = "Create Account";
+"welcome.sign_in" = "Sign In";
+"welcome.already_account" = "Already have an account?";
+
+// Auth
+"auth.full_name" = "Full Name";
+"auth.university_email" = "University Email";
+"auth.password" = "Password";
+"auth.confirm_password" = "Confirm Password";
+"auth.email_invalid" = "Must be a valid @udst.edu.qa address";
+"auth.passwords_dont_match" = "Passwords don't match";
+
+// Tabs
+"tab.home" = "Home";
+"tab.search" = "Search";
+"tab.sell" = "Sell";
+"tab.profile" = "Profile";
+"tab.admin" = "Admin";
+
+// Listing detail
+"listing.buy_now" = "Buy Now";
+"listing.report" = "Report Listing";
+"listing.description" = "Description";
+"listing.sold" = "Sold";
+
+// Create listing
+"create.title" = "New Listing";
+"create.photos_step" = "Add up to %d photos";
+"create.details_step" = "Listing Details";
+"create.review_step" = "Review & Publish";
+"create.publish" = "Publish Listing";
+"create.under_review" = "Under Review";
+"create.published" = "Listing Published!";
+
+// Checkout
+"checkout.title" = "Checkout";
+"checkout.item_price" = "Item Price";
+"checkout.platform_fee" = "Platform Fee (10%%)";
+"checkout.total" = "Total Charge";
+"checkout.pay" = "Pay";
+"checkout.success" = "Payment Successful!";
+
+// Profile
+"profile.my_listings" = "My Listings";
+"profile.order_history" = "Order History";
+"profile.edit_profile" = "Edit Profile";
+"profile.language" = "Language";
+"profile.sign_out" = "Sign Out";
+
+// Search
+"search.title" = "Search";
+"search.recent" = "Recent Searches";
+"search.no_results" = "No results found";
+
+// Admin
+"admin.moderation" = "Moderation Queue";
+"admin.transactions" = "Transaction Log";
+"admin.users" = "User Management";
+"admin.approve" = "Approve";
+"admin.remove" = "Remove";
+"admin.dismiss" = "Dismiss";
+"admin.suspend" = "Suspend";
+
+// General
+"common.cancel" = "Cancel";
+"common.save" = "Save";
+"common.done" = "Done";
+"common.continue" = "Continue";
+"common.back" = "Back";
+"common.apply" = "Apply";
+"common.reset" = "Reset";
+"common.loading" = "Loading…";

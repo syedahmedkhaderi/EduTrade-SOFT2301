@@ -1,0 +1,92 @@
+/* EduTrade — الترجمة العربية (Arabic localization) */
+
+// App
+"app.name" = "إديوتريد";
+"app.tagline" = "شراء وبيع المواد الأكاديمية المستعملة في UDST";
+
+// Conditions
+"condition_new" = "جديد";
+"condition_like_new" = "كالجديد";
+"condition_good" = "جيد";
+"condition_fair" = "مقبول";
+"condition_poor" = "سيء";
+
+// Validation
+"pwd_short" = "٨ أحرف على الأقل";
+"pwd_weak" = "يجب أن تحتوي على حرف ورقم واحد على الأقل";
+"no_ratings" = "لا توجد تقييمات بعد";
+"no_ratings_short" = "لا تقييمات";
+
+// Welcome
+"welcome.create_account" = "إنشاء حساب";
+"welcome.sign_in" = "تسجيل الدخول";
+"welcome.already_account" = "لديك حساب بالفعل؟";
+
+// Auth
+"auth.full_name" = "الاسم الكامل";
+"auth.university_email" = "البريد الجامعي";
+"auth.password" = "كلمة المرور";
+"auth.confirm_password" = "تأكيد كلمة المرور";
+"auth.email_invalid" = "يجب أن يكون بريدًا صالحًا @udst.edu.qa";
+"auth.passwords_dont_match" = "كلمتا المرور غير متطابقتين";
+
+// Tabs
+"tab.home" = "الرئيسية";
+"tab.search" = "بحث";
+"tab.sell" = "بيع";
+"tab.profile" = "الملف الشخصي";
+"tab.admin" = "الإدارة";
+
+// Listing detail
+"listing.buy_now" = "اشترِ الآن";
+"listing.report" = "الإبلاغ عن الإعلان";
+"listing.description" = "الوصف";
+"listing.sold" = "تم البيع";
+
+// Create listing
+"create.title" = "إعلان جديد";
+"create.photos_step" = "أضف حتى %d صور";
+"create.details_step" = "تفاصيل الإعلان";
+"create.review_step" = "مراجعة ونشر";
+"create.publish" = "نشر الإعلان";
+"create.under_review" = "قيد المراجعة";
+"create.published" = "تم نشر الإعلان!";
+
+// Checkout
+"checkout.title" = "الدفع";
+"checkout.item_price" = "سعر المنتج";
+"checkout.platform_fee" = "رسوم المنصة (١٠٪)";
+"checkout.total" = "الإجمالي";
+"checkout.pay" = "ادفع";
+"checkout.success" = "تم الدفع بنجاح!";
+
+// Profile
+"profile.my_listings" = "إعلاناتي";
+"profile.order_history" = "سجل الطلبات";
+"profile.edit_profile" = "تعديل الملف الشخصي";
+"profile.language" = "اللغة";
+"profile.sign_out" = "تسجيل الخروج";
+
+// Search
+"search.title" = "بحث";
+"search.recent" = "عمليات البحث الأخيرة";
+"search.no_results" = "لا توجد نتائج";
+
+// Admin
+"admin.moderation" = "قائمة المراجعة";
+"admin.transactions" = "سجل المعاملات";
+"admin.users" = "إدارة المستخدمين";
+"admin.approve" = "موافقة";
+"admin.remove" = "إزالة";
+"admin.dismiss" = "تجاهل";
+"admin.suspend" = "تعليق";
+
+// General
+"common.cancel" = "إلغاء";
+"common.save" = "حفظ";
+"common.done" = "تم";
+"common.continue" = "متابعة";
+"common.back" = "رجوع";
+"common.apply" = "تطبيق";
+"common.reset" = "إعادة تعيين";
+"common.loading" = "جاري التحميل…";
