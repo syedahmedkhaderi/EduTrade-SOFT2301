@@ -3,7 +3,7 @@ import Foundation
 /// A single in-memory data store backing all mock services.
 /// Concurrency-safe actor. State persists across app launches via JSON on disk.
 actor MockStore {
-    private let currentSeedVersion = 2
+    private let currentSeedVersion = 3
 
     // MARK: - State
 
@@ -95,18 +95,27 @@ actor MockStore {
 
         // --- Listings ---
         let sampleImageAssets = (
-            openBook: "item-open-book",
+            pythonBook: "textbook-python",
             graphingCalculator: "item-graphing-calculator",
+            anatomyManual: "textbook-anatomy",
             stethoscope: "item-stethoscope",
+            mechanicsBook: "textbook-mechanics",
             draftingTools: "item-drafting-tools",
+            businessStatsBook: "textbook-stats",
             scientificCalculator: "item-scientific-calculator",
+            digitalBook: "textbook-digital",
             multimeter: "item-multimeter",
-            welding: "item-welding-ppe",
+            calculusBook: "textbook-calculus",
             safetyGoggles: "item-safety-goggles",
-            labGoggles: "item-lab-goggles",
+            databaseBook: "textbook-database",
+            englishNotes: "notes-english",
+            networkBook: "textbook-network",
             laptopDesk: "item-laptop-desk",
+            labGoggles: "item-lab-goggles",
+            welding: "item-welding-ppe",
+            physicsBook: "textbook-physics",
             studyDesk: "item-study-desk",
-            studyStack: "item-study-stack"
+            microbioNotes: "notes-microbio"
         )
 
         let sampleListings: [(String, String, String, String, Double, Condition, String, Int)] = [
@@ -114,7 +123,7 @@ actor MockStore {
             ("Intro to Python Programming",
              "Used for SOFT1101. Clean pages, a few sticky tabs, and one summary sheet tucked inside.",
              "SOFT1101", "Computer Science", 90.0, .good,
-             sampleImageAssets.openBook, 1),
+             sampleImageAssets.pythonBook, 1),
 
             ("TI-84 Plus Graphing Calculator",
              "Used through MATH1401 and MATH1301. Fresh batteries included and all keys work perfectly.",
@@ -124,7 +133,7 @@ actor MockStore {
             ("Human Anatomy & Physiology Lab Manual",
              "Used for HSCI2103. Spiral binding intact and no pages filled in.",
              "HSCI2103", "Health Sciences", 65.0, .good,
-             sampleImageAssets.studyStack, 4),
+             sampleImageAssets.anatomyManual, 4),
 
             ("Clinical Stethoscope Starter Kit",
              "Ideal for first-year nursing labs. Includes soft case and spare ear tips.",
@@ -134,7 +143,7 @@ actor MockStore {
             ("Engineering Mechanics: Statics",
              "Hibbeler 14th edition. Hardcover with only light shelf wear.",
              "MECH1201", "Engineering", 180.0, .likeNew,
-             sampleImageAssets.openBook, 2),
+             sampleImageAssets.mechanicsBook, 2),
 
             ("Mechanical Drawing Kit",
              "T-square, triangles, compass set, and mechanical pencils for MECH1102 drafting labs.",
@@ -144,7 +153,7 @@ actor MockStore {
             ("Introduction to Business Statistics",
              "Used for BUSI2305. Includes a formula sheet and neat pencil annotations.",
              "BUSI2305", "Business", 80.0, .good,
-             sampleImageAssets.openBook, 2),
+             sampleImageAssets.businessStatsBook, 2),
 
             ("Casio Scientific Calculator",
              "Great for foundation math and physics classes. Screen is clear and solar panel works well.",
@@ -154,7 +163,7 @@ actor MockStore {
             ("Digital Fundamentals",
              "Used for ELCT1301. Excellent condition with no missing pages or folds.",
              "ELCT1301", "Electrical", 95.0, .new,
-             sampleImageAssets.openBook, 6),
+             sampleImageAssets.digitalBook, 6),
 
             ("Digital Multimeter for Circuits Lab",
              "Reliable student meter for ELCT2201. Comes with test leads and pouch.",
@@ -164,7 +173,7 @@ actor MockStore {
             ("Calculus: Early Transcendentals",
              "Stewart 8th edition. Hardcover in strong condition and ideal for MATH1401.",
              "MATH1401", "Mathematics", 220.0, .likeNew,
-             sampleImageAssets.openBook, 5),
+             sampleImageAssets.calculusBook, 5),
 
             ("Safety Goggles + Lab Apron Set",
              "Packed for chemistry and biology practicals. Goggles are anti-fog and apron is freshly cleaned.",
@@ -174,17 +183,17 @@ actor MockStore {
             ("Database Systems Design",
              "Connolly & Begg 7th edition. Excellent condition for SOFT2301 students.",
              "SOFT2301", "Computer Science", 145.0, .likeNew,
-             sampleImageAssets.openBook, 6),
+             sampleImageAssets.databaseBook, 6),
 
             ("English Academic Writing Notes Bundle",
              "Bound lecture notes, essay structure templates, and sample citation pages for ENGL1001.",
              "ENGL1001", "English Language", 40.0, .good,
-             sampleImageAssets.studyDesk, 5),
+             sampleImageAssets.englishNotes, 5),
 
             ("Network+ Certification Study Guide",
              "Exam N10-008 prep guide. Minimal highlighting and a clean cover.",
              "ITEC2401", "Information Technology", 140.0, .likeNew,
-             sampleImageAssets.laptopDesk, 6),
+             sampleImageAssets.networkBook, 6),
 
             ("Laptop Stand + Wireless Keyboard Combo",
              "Great for programming sessions in the library or dorm. Folds flat into a backpack.",
@@ -204,12 +213,12 @@ actor MockStore {
             ("Physics Problem-Solving Binder",
              "Worked examples, quizzes, and equation sheets organized for PHYS1302.",
              "PHYS1302", "Applied Sciences", 55.0, .good,
-             sampleImageAssets.studyStack, 1),
+             sampleImageAssets.physicsBook, 1),
 
             ("Microbiology Lecture Notes (Printed)",
              "Complete semester notes printed and bound for HSCI2204 with clear section tabs.",
              "HSCI2204", "Health Sciences", 50.0, .good,
-             sampleImageAssets.studyDesk, 7)
+             sampleImageAssets.microbioNotes, 7)
         ]
 
         for (idx, listing) in sampleListings.enumerated() {
